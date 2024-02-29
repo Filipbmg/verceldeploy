@@ -11,7 +11,7 @@ app.get('/time/ip', async (req, res) => {
 
         const { datetime, timezone } = response.data;
 
-        res.json({ datetime, timezone });
+        res.send({ datetime, timezone });
     } catch (error) {
         res.status(500).json({ error: 'Unable to fetch time' });
     }
