@@ -4,27 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4; /* Light gray background */
+            font-family: 'Arial', sans-serif; /* Change the font */
+        }
 
+        #content {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #ffffff; /* White background for content */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow for a subtle effect */
+        }
     </style>
-    <title>World Clocks</title>
+    <title>Timelord</title>
 </head>
 <body>
-<h1>Your current time:</h1>
-<p id="usersTime"></p>
+<div id="content">
+    <h1>Your current date and time:</h1>
+    <p id="usertime"></p>
+</div>
 <script>
     async function timeFromIp() {
         try {
             const response = await fetch('/time/ip');
             const data = await response.json();
 
-            document.getElementById('usersTime').innerHTML = `${data.datetime} (${data.timezone})`;
+            const formattedDatetime = formatDatetime(data.datetime);
+
+            document.getElementById('usertime').innerHTML = `${formattedDatetime}`;
         } catch (error) {
             console.error('Error fetching time from the API:', error);
-            document.getElementById('time').innerHTML = 'Unable to fetch time';
+            document.getElementById('usertime').innerHTML = 'Unable to fetch time';
         }
     }
     document.addEventListener('DOMContentLoaded', timeFromIp);
     setInterval(timeFromIp, 1000);
+
+    function formatDatetime(datetime) {
+        const dateObj = new Date(datetime);
+
+        const day = String(dateObj.getDate()).padStart(2, '0');
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const year = dateObj.getFullYear();
+        const dateFormatted = `${day}/${month}/${year}`;
+
+        const timeOptions = {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+        };
+
+        const timeString = dateObj.toLocaleTimeString(undefined, timeOptions);
+
+        return `${dateFormatted}<br>${timeString}`;
+    }
 </script>
 </body>
 </html>
