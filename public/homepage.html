@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+
+    </style>
+    <title>World Clocks</title>
+</head>
+<body>
+<h1>Your current time:</h1>
+<p id="usersTime"></p>
+<script>
+    async function timeFromIp() {
+        try {
+            const response = await fetch('/time/ip');
+            const data = await response.json();
+
+            document.getElementById('usersTime').innerHTML = `${data.datetime} (${data.timezone})`;
+        } catch (error) {
+            console.error('Error fetching time from the API:', error);
+            document.getElementById('time').innerHTML = 'Unable to fetch time';
+        }
+    }
+    document.addEventListener('DOMContentLoaded', timeFromIp);
+    setInterval(timeFromIp, 1);
+</script>
+</body>
+</html>
